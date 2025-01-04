@@ -1,5 +1,12 @@
 <script>
-    
+	import ProfileWindow from "$lib/components/profileWindow.svelte";  
+    import placeholderImage from "$lib/icons/worldface-british-guy-white-background.jpg";
+
+    let showProfile = false;
+
+    function changeProfileVisibility(){
+        showProfile = showProfile ? false : true;
+    }
 </script>
 
 <div class="box">
@@ -15,9 +22,12 @@
         <div class="month">
             <p>&lt Styczeń 2025 &gt</p>
         </div>
-
-        <div class="login">
-
+        
+        <div class="profile">
+            {#if showProfile}
+                <ProfileWindow />
+            {/if}    
+            <img src={placeholderImage} alt="Profile" id="profilePicture" class:showProfile onclick={changeProfileVisibility}>   
         </div>
     </header>
     <main>
@@ -30,9 +40,11 @@
     </main>
 </div>
 
-
-
 <style>
+    :global(*){
+        font-family: "Kulim Park", serif;
+    }
+    
     :global(html){
         height: 100%;
     }
@@ -50,15 +62,15 @@
 
     header{
         width: 100%;
-        height: 80px;
+        height: 100px;
         display: flex;
         align-items: center;
         background-color: antiquewhite;
     }
 
     header .burger{
-        height: 50px;
-        width: 50px;
+        height: 55px;
+        width: 55px;
         display: block;
         margin-left: 25px;
         background-color: aquamarine;
@@ -73,7 +85,7 @@
 
     header .name{
         margin-left: 25px;
-        font-size: 25px;
+        font-size: 30px;
         font-weight: bold;
     }
     
@@ -92,12 +104,22 @@
         margin: auto;
     }
 
-    header .login{
-        width: 60px;
-        height: 60px;
+    header .profile{
+        width: 65px;
+        height: 65px;
+        margin-right: 25px;  
+    }
+
+    header #profilePicture{
+        width: 65px;
+        height: 65px;
         border-radius: 100px;
-        margin-right: 25px;
-        background-color: blueviolet;
+        transform-style: preserve-3d;
+    }
+
+    header .showProfile{
+        position: relative;
+        bottom: 85px;
     }
 
     main{
