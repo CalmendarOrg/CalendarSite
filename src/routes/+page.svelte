@@ -1,17 +1,23 @@
 <script>
 	import ProfileWindow from "$lib/components/profileWindow.svelte";  
     import placeholderImage from "$lib/icons/worldface-british-guy-white-background.jpg";
+    import MonthDay from "$lib/components/monthDay.svelte";
 
     let showProfile = false;
-
     function changeProfileVisibility(){
         showProfile = showProfile ? false : true;
+    }
+
+    let hide = false;
+    function changeLeftMenu(){
+        if(hide === true) hide = false;
+        else hide = true;
     }
 </script>
 
 <div class="box">
     <header>
-        <div class="burger">
+        <div class="burger" onclick={changeLeftMenu}>
 
         </div>
 
@@ -31,11 +37,16 @@
         </div>
     </header>
     <main>
-        <div class="leftMenu">
+        <div class="leftMenu" class:hide>
 
         </div>
         <div class="calendar">
-        
+            <MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay />
+            <MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay />
+            <MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay />
+            <MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay />
+            <MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay />
+            <MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay />
         </div>
     </main>
 </div>
@@ -131,10 +142,19 @@
 
     main .leftMenu{
         background-color: cornsilk;
-        width: 290px;       
+        width: 290px;
+        transition: width 200ms ease-in-out;       
+    }
+
+    main .hide{
+        width: 0px;
+        transition: width 200ms ease-in-out;
     }
 
     main .calendar{
-        display: none;
+        flex: 1 1 auto;
+        display: grid;
+        grid-template-columns: auto auto auto auto auto auto auto;
+        margin: 20px;
     }
 </style>
