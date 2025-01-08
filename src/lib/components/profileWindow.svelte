@@ -25,13 +25,15 @@
     .profileWindow{
         width: 430px;
         height: 85px;
-        background-color: chocolate;
+        background-color: lightgray;
         position: relative;
         right: 355px;
         top: -10px;
         transform: translateZ(-10px);
         display: flex;
         flex-direction: column;
+        box-shadow: 0px 8px 12px 6px rgba(0, 0, 0, 0.15);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.30);
     }
 
     .profileWindow h2{       

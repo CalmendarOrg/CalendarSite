@@ -1,6 +1,8 @@
 <script>
-	import ProfileWindow from "$lib/components/profileWindow.svelte";  
-    import placeholderImage from "$lib/icons/worldface-british-guy-white-background.jpg";
+	import placeholderImage from "$lib/icons/worldface-british-guy-white-background.jpg";
+    import leftArrow from "$lib/icons/left-arrow.png";
+    
+    import ProfileWindow from "$lib/components/profileWindow.svelte";  
     import MonthDay from "$lib/components/monthDay.svelte";
 	import NewTaskButton from "$lib/components/newTaskButton.svelte";
 	import TagButton from "$lib/components/tagButton.svelte";
@@ -15,8 +17,25 @@
         if(hide === true) hide = false;
         else hide = true;
     }
+
+    const month = [];
+    let j = 30;
+    let h = false;
+      
+    for(let i = 0; i < 7*5; i++){
+        month.push({dayNumber: j, thisMonth: h})
+        if(j < 31){
+            j++
+        }else {
+            j = 1;
+            h = h ? false : true;
+        }   
+    }
+
+    /*
     
-    let daysInMonth = [1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7 ,1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7];
+    */
+
 </script>
 
 <div class="box">
@@ -30,7 +49,7 @@
         </div>
 
         <div class="month">
-            <p>&lt Styczeń 2025 &gt</p>
+            <img src={leftArrow} alt="<" class="arrow"><p>Styczeń 2025</p><img src={leftArrow} alt=">" class="arrow rotate">
         </div>
         
         <div class="profile">
@@ -67,8 +86,8 @@
             <div class="weekDay calendarBorders rightBorder">
                 <h2>Ndz</h2>
             </div>
-            {#each daysInMonth as dayNumber, i}
-                <MonthDay dayNumber={i} rightBorder={(i+1) % 7 === 0} darkerBg={((i) % 7) % 2 === 0}/>
+            {#each month as day, i}
+                <MonthDay dayNumber={day.dayNumber} rightBorder={(i+1) % 7 === 0} darkerBg={((i) % 7) % 2 === 0} outOfMonth={!day.thisMonth}/>
             {/each}
         </div>
     </main>
@@ -81,6 +100,7 @@
     
     :global(html){
         height: 100%;
+        background-color: rgb(250, 250, 250);
     }
     
     :global(body){
@@ -99,7 +119,6 @@
         height: 100px;
         display: flex;
         align-items: center;
-        background-color: antiquewhite;
     }
 
     header .burger{
@@ -132,10 +151,26 @@
         margin-left: auto;
         font-size: 35px;
         font-weight: bold;
+        display: flex;
     }
 
     header .month p{
-        margin: auto;
+        margin: 0px 20px;
+        align-self: center;
+    }
+
+    header .month .arrow{
+        height: 30px;
+        width: 30px;
+        align-self: center;
+    }
+
+    header .month .arrow:hover{
+        cursor: pointer;
+    }
+
+    header .month .rotate{
+        transform: rotate(180deg);
     }
 
     header .profile{
@@ -149,10 +184,12 @@
         height: 65px;
         border-radius: 100px;
         transform-style: preserve-3d;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
     }
 
     header #profilePicture:hover{
         cursor: pointer;
+        box-shadow: 2px 2px 10px 4px rgba(0, 0, 0, 0.3);
     }
 
     header .showProfile{
@@ -167,9 +204,8 @@
     }
 
     main .leftMenu{
-        background-color: cornsilk;
         width: 290px;
-        transition: width 200ms ease-in-out;       
+        transition: width 200ms ease-in-out;           
     }
 
     main .hide{
@@ -183,18 +219,22 @@
         grid-template-columns: repeat(7, minmax(0, 1fr));
         grid-template-rows: 50px;
         margin: 20px;
-        margin-bottom: 50px;
+        margin-bottom: 30px;
     }
 
     main .calendar .weekDay{
         display: flex;
         align-items: center;
         position: relative;
+        margin-top: 20px;
     }   
 
     main .calendar .weekDay h2{
         text-align: center;
-        margin: 0px auto;    
+        margin: 0px auto;
+        position: relative;
+        bottom: 22px;
+        margin-top: 10px;
     }
 
     

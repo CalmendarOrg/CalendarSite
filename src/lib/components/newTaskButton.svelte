@@ -22,6 +22,7 @@
         right: 0px;
         transition: right 200ms ease-in-out;
         background-color: whitesmoke;
+        box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
     }
 
     .createNewTask:hover{

@@ -27,11 +27,13 @@
     }
 </script>
 
-<div class="tagButton" class:hideButton = {hide} style:background-color = {bgColor} style:border-color = {bordeColor}>
-    <input type="checkbox" id={tagName || "" + count + "ChkBox"} onclick={handleChkBoxClick} 
-        style:background-color = {chBoxBgColor} style:border-color = {chBoxBorderColor}>
-    <h2>{tagName || "Placeholder"}</h2>
-</div>
+<label for={tagName || "" + count + "ChkBox"}>
+    <div class="tagButton" class:hideButton = {hide} style:background-color = {bgColor} style:border-color = {bordeColor}>
+        <input type="checkbox" id={tagName || "" + count + "ChkBox"} onclick={handleChkBoxClick} 
+           style:background-color = {chBoxBgColor} style:border-color = {chBoxBorderColor}>
+        <h2>{tagName || "Placeholder"}</h2>
+    </div>
+</label>
 
 <style>
     .tagButton{        
@@ -46,6 +48,11 @@
         margin-top: 50px;
         right: 0px;
         transition: right 200ms ease-in-out;
+        box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .tagButton:hover{
+        cursor: pointer;
     }
 
     .tagButton input{
