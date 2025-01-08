@@ -2,13 +2,14 @@
 	import ProfileWindow from "$lib/components/profileWindow.svelte";  
     import placeholderImage from "$lib/icons/worldface-british-guy-white-background.jpg";
     import MonthDay from "$lib/components/monthDay.svelte";
+	import NewTaskButton from "$lib/components/newTaskButton.svelte";
 
     let showProfile = false;
     function changeProfileVisibility(){
         showProfile = showProfile ? false : true;
     }
 
-    let hide = false;
+    let hide = $state(false);
     function changeLeftMenu(){
         if(hide === true) hide = false;
         else hide = true;
@@ -31,14 +32,14 @@
         
         <div class="profile">
             {#if showProfile}
-                <ProfileWindow />
+                <ProfileWindow/>
             {/if}    
             <img src={placeholderImage} alt="Profile" id="profilePicture" class:showProfile onclick={changeProfileVisibility}>   
         </div>
     </header>
     <main>
         <div class="leftMenu" class:hide>
-
+            <NewTaskButton {hide}/>
         </div>
         <div class="calendar">
             <MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay />
