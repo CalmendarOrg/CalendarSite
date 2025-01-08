@@ -13,6 +13,8 @@
         if(hide === true) hide = false;
         else hide = true;
     }
+    
+    let daysInMonth = [1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7 ,1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7];
 </script>
 
 <div class="box">
@@ -41,12 +43,30 @@
 
         </div>
         <div class="calendar">
-            <MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay />
-            <MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay />
-            <MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay />
-            <MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay />
-            <MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay />
-            <MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay />
+            <div class="weekDay calendarBorders">
+                <h2>Pon</h2>
+            </div>
+            <div class="weekDay calendarBorders">
+                <h2>Wt</h2>
+            </div>
+            <div class="weekDay calendarBorders">
+                <h2>Śr</h2>
+            </div>
+            <div class="weekDay calendarBorders">
+                <h2>Czw</h2>
+            </div>
+            <div class="weekDay calendarBorders">
+                <h2>Pt</h2>
+            </div>
+            <div class="weekDay calendarBorders">
+                <h2>Sob</h2>
+            </div>
+            <div class="weekDay calendarBorders rightBorder">
+                <h2>Ndz</h2>
+            </div>
+            {#each daysInMonth as dayNumber, i}
+                <MonthDay dayNumber={i} rightBorder={(i+1) % 7 === 0} darkerBg={((i) % 7) % 2 === 0}/>
+            {/each}
         </div>
     </main>
 </div>
@@ -136,7 +156,6 @@
     main{
         width: 100%;
         flex: 1 1 auto;
-        background-color: burlywood;
         display: flex;
     }
 
@@ -154,7 +173,22 @@
     main .calendar{
         flex: 1 1 auto;
         display: grid;
-        grid-template-columns: auto auto auto auto auto auto auto;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        grid-template-rows: 50px;
         margin: 20px;
+        margin-bottom: 50px;
     }
+
+    main .calendar .weekDay{
+        display: flex;
+        align-items: center;
+        position: relative;
+    }   
+
+    main .calendar .weekDay h2{
+        text-align: center;
+        margin: 0px auto;    
+    }
+
+    
 </style>
