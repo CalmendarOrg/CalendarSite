@@ -3,8 +3,9 @@
     import placeholderImage from "$lib/icons/worldface-british-guy-white-background.jpg";
     import MonthDay from "$lib/components/monthDay.svelte";
 	import NewTaskButton from "$lib/components/newTaskButton.svelte";
+	import TagButton from "$lib/components/tagButton.svelte";
 
-    let showProfile = false;
+    let showProfile = $state(false);
     function changeProfileVisibility(){
         showProfile = showProfile ? false : true;
     }
@@ -40,6 +41,7 @@
     <main>
         <div class="leftMenu" class:hide>
             <NewTaskButton {hide}/>
+            <TagButton {hide} tagColor = "Blue"/>
         </div>
         <div class="calendar">
             <MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay /><MonthDay />
@@ -127,6 +129,10 @@
         height: 65px;
         border-radius: 100px;
         transform-style: preserve-3d;
+    }
+
+    header #profilePicture:hover{
+        cursor: pointer;
     }
 
     header .showProfile{

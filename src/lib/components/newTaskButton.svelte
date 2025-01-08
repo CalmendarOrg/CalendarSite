@@ -16,8 +16,8 @@
         justify-self: center;
         justify-content: center;
         width: max-content;
-        padding: 10px 15px;
-        border: 2px solid black;
+        padding: 15px 15px;
+        border: 2px solid lightgrey;
         margin-top: 50px;
         right: 0px;
         transition: right 200ms ease-in-out;
@@ -29,14 +29,14 @@
     }
 
     .createNewTask img{
-        width: 18px;
-        height: 18px;
+        width: 22px;
+        height: 22px;
         margin-right: 10px;
     }
 
     .createNewTask h2{
         margin: 0px;
-        font-size: 20px;
+        font-size: 22px;
     }
 
     .hideButton{
