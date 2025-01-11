@@ -3,8 +3,6 @@
     let bgColor = $state("whitesmoke");
     let bordeColor = $state("lightgrey");
 
-    console.log(tagColor.toLowerCase());
-
     switch(tagColor.toLowerCase()){
         case "blue":
             bgColor = "#DDE7FF";
