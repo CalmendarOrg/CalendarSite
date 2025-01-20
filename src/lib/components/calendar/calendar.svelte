@@ -6,16 +6,6 @@
     const month = [];
     let j = 30;
     let h = false;
-      
-    for(let i = 0; i < 7*5; i++){
-        month.push({dayNumber: j, thisMonth: h})
-        if(j < 31){
-            j++
-        }else {
-            j = 1;
-            h = h ? false : true;
-        }   
-    }
 </script>
 
 <div class="calendar">
