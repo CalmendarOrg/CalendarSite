@@ -10,6 +10,7 @@
         if(hide === true) hide = false;
         else hide = true;
     }
+
 </script>
 
 <div class="box">
@@ -19,7 +20,7 @@
             <NewTaskButton {hide}/>
             <TagButton {hide} tagColor = "Blue"/>
         </div>
-        <Calendar />
+        <Calendar/>
     </main>
 </div>
 
@@ -30,7 +31,7 @@
     
     :global(html){
         height: 100%;
-        background-color: rgb(250, 250, 250);
+        background-color: rgb(252, 252, 252);
     }
     
     :global(body){
@@ -52,6 +53,7 @@
 
     main .leftMenu{
         width: 290px;
+        margin: 0px 15px;
         transition: width 200ms ease-in-out;           
     }
 

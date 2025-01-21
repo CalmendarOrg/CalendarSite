@@ -1,6 +1,4 @@
 export function showMonthName(monthNumber){
-    console.log(monthNumber);
-    
     switch(monthNumber){
         case 1:
             return "Styczeń";

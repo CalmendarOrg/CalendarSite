@@ -25,7 +25,7 @@
     }
 
     :global(.darkerBg){
-        background-color: rgba(230, 230, 230, 0.47);
+        background-color: rgba(230, 230, 230, 0.527);
     }
 
     :global(.calendarBorders){
