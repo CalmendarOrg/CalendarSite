@@ -5,13 +5,14 @@
     import ProfileWindow from "$lib/components/profileWindow.svelte"; 
     import { showMonthName } from "$lib/helpers/monthName.helper";
     
-    let { changeLeftMenu } = $props();
+    let { changeLeftMenu, changeMonthDays } = $props();
     
     let currentDateToShow = $state(new Date());
 
     function changeDate(monthShift){
         currentDateToShow.setMonth(currentDateToShow.getMonth() + monthShift);
         currentDateToShow = new Date(currentDateToShow);
+        changeMonthDays(monthShift);
     }
 
     let showProfile = $state(false);

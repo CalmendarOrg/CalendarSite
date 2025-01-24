@@ -1,9 +1,9 @@
 <script>
     import MonthDay from "$lib/components/calendar/monthDay.svelte";
-	import { getMonthDays } from "$lib/helpers/monthInDays.helper";
     
+    let { month } = $props();
     const today = new Date();
-    let month = $state(getMonthDays(today)); 
+    
 
 </script>
 

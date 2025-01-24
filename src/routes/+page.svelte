@@ -1,9 +1,9 @@
 <script>
-    import ProfileWindow from "$lib/components/profileWindow.svelte";  
 	import NewTaskButton from "$lib/components/buttons/newTaskButton.svelte";
 	import TagButton from "$lib/components/buttons/tagButton.svelte";
 	import Calendar from "$lib/components/calendar/calendar.svelte";
 	import Header from "$lib/components/header.svelte";
+    import { getMonthDays } from "$lib/helpers/monthInDays.helper";
 
     let hide = $state(false);
     function changeLeftMenu(){
@@ -11,16 +11,23 @@
         else hide = true;
     }
 
+    const date = new Date();
+    let month = $state(getMonthDays(date)); 
+    function changeMonthDays(monthShift){
+        date.setMonth(date.getMonth() + monthShift);
+        month = getMonthDays(date);
+    }
+
 </script>
 
 <div class="box">
-    <Header {changeLeftMenu}/>
+    <Header {changeLeftMenu} {changeMonthDays}/>
     <main>
         <div class="leftMenu" class:hide>
             <NewTaskButton {hide}/>
             <TagButton {hide} tagColor = "Blue"/>
         </div>
-        <Calendar/>
+        <Calendar {month}/>
     </main>
 </div>
 

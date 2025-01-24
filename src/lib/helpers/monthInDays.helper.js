@@ -1,7 +1,7 @@
 export function getMonthDays(thisMonth){
     const days = [];
     
-    let date = new Date();
+    let date = new Date(thisMonth);
     let endOfMonth = false;
     
     while(true){
@@ -14,7 +14,7 @@ export function getMonthDays(thisMonth){
     }
 
     endOfMonth = false;
-    date = new Date();
+    date = new Date(thisMonth);
     
     while(true){        
         date.setDate(date.getDate() + 1);
@@ -24,6 +24,5 @@ export function getMonthDays(thisMonth){
         
         days.push({day: date.getDate(), otherMonth: endOfMonth});
     }
-
     return days;
 }
