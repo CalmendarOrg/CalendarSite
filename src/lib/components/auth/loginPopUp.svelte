@@ -1,39 +1,73 @@
 <script>
-    import googleIcon from "$lib/icons/googleIcon.png";
     import popUpBgImg from "$lib/images/loginBgImg.jpg";
+	import AuthForm from "$lib/components/auth/authForm.svelte";
+    import { registerEmailPassword, signInEmailAndPassword } from "$lib/firebase/auth.client"
+
+    let logInForm = $state(true);
+    let emailValue = $state('');
+    let emailErrorText = $state('');
+    let passwordErrorText = $state('');
+
+    async function register(e){
+        try {
+            emailErrorText = '';
+            passwordErrorText = '';
+
+            const formData = new FormData(e.target);
+            const email = formData.get('email');
+            const password = formData.get('password');
+
+            const user = await registerEmailPassword(email, password);
+        } catch (error) {            
+            if(error.code === 'auth/invalid-email' || error.code === 'auth/missing-email'){
+                emailErrorText = "Error! Podano nieprawidłowy email!";
+            }else if(error.code === 'auth/missing-password'){
+                passwordErrorText = "Error! Nie podano hasła!"
+            }else if(error.code === 'auth/password-does-not-meet-requirements'){
+                passwordErrorText = "Error! Podane hasło jest niepoprawne!"
+            }else if(error.code === 'auth/email-already-in-use'){
+                logInForm = true;
+                emailErrorText = "Error! Podany email posiada juz konto!";
+            }
+        }
+    }
+
+    async function logIn(e){
+        try {
+            emailErrorText = '';
+            passwordErrorText = '';
+            
+            const formData = new FormData(e.target);
+            const email = formData.get('email');
+            const password = formData.get('password');
+
+            const user = await signInEmailAndPassword(email, password);
+        } catch (error) {
+            if(error.code === 'auth/invalid-email' || error.code === 'auth/missing-email'){
+                emailErrorText = "Error! Podano nieprawidłowy email!";
+            }else if(error.code === 'auth/missing-password'){
+                passwordErrorText = "Error! Nie podano hasła!"
+            }else if(error.code === 'auth/invalid-credential'){
+                emailErrorText = "Error! Niepoprawny email lub hasło";
+                passwordErrorText = "Error! Niepoprawny email lub hasło"
+            }
+        }
+    }
 </script>
 
 <div class="popUpBackground">
     <div class="loginPopUp">
         <div class="leftSide">
-            
+
         </div>
         <div class="rightSide">     
             <h2>Cal(m)endar</h2>
             <h3>Twój spokój ducha podczas planowania</h3>
-            <form>
-                <div class="inputSection">
-                    <label for="email"><h4>Email</h4></label>
-                    <input type="email" name="email" id="email">
-                </div>
-                
-                <div class="inputSection">
-                    <label for="password"><h4>Hasło</h4></label>
-                    <input type="password" name="password" id="password">
-                </div>
-                
-                <p id="forgotPassword"><a href="">Zapomniałeś hasła?</a></p>
-                
-                <button id="logInBt" type="submit">Zaloguj się</button>
-                
-                <div id="orText">
-                    <div class="line"></div><p>Lub</p><div class="line"></div>
-                </div>
-                
-                <button id="googleLoginBt"><img src={googleIcon} alt="">Zaloguj się z Google</button>
-                
-                <p>Dopiero zaczynasz? <a href="">Stwórz konto</a></p>
-            </form>
+            {#if logInForm}
+                <AuthForm bind:logInForm authFunction={logIn} bind:emailValue {emailErrorText} {passwordErrorText}/>
+            {:else}
+                <AuthForm bind:logInForm authFunction={register} bind:emailValue {emailErrorText} {passwordErrorText}/>
+            {/if}            
         </div>
     </div>
 </div>   
@@ -68,6 +102,8 @@
     }
 
     .loginPopUp .rightSide{
+        position: relative;
+        left: 10px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -89,15 +125,9 @@
         .loginPopUp .rightSide{
             width: 100%;
             transition: all 500ms;
+            left: 0px;
         }
     }  
-
-    .loginPopUp form{
-        width: 90%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
 
     .loginPopUp h2{
         font-size: 38px;
@@ -110,125 +140,5 @@
         text-align: center;
         margin: 20px 80px;
         color: rgb(125, 86, 19);
-    }
-
-    .loginPopUp h4{
-        font-size: 18px;
-        margin: auto;
-        margin: 5px auto;
-    }
-
-    .loginPopUp .inputSection{
-        margin: auto;
-        width: 80%;
-        margin: 15px auto 0px auto;
-        position: relative;
-        left: 5px;
-    }
-
-    .loginPopUp input{
-        width: 90%;
-        border: none;
-        background-color: rgba(255, 255, 255, 0);
-        border-bottom: 1px solid rgb(93, 93, 93);
-        font-size: 16px;
-        font-weight: 100;
-        padding: 1px 5px;
-        transition: transform 80ms;
-    }
-
-    .loginPopUp input:hover {
-        transform: scale(1.03);
-        transition: transform 80ms;
-    }
-
-    .loginPopUp input:focus{
-        transform: scale(1.03);
-        outline: none;
-        font-weight: 400;
-        background-color: rgba(211, 211, 211, 0.3);
-    }
-
-    .loginPopUp #forgotPassword{
-        margin-top: 10px;
-        margin-left: auto;
-        margin: 6px 30px 20px auto;
-        width: max-content;
-        font-size: 14px;
-        transition: all 80ms;
-        
-    }
-
-    .loginPopUp a{
-        color: rgb(154, 113, 8);
-        transition: all 80ms;
-    }
-
-    .loginPopUp #forgotPassword:hover{
-        cursor: pointer;
-        transform: scale(1.04);
-        transition: all 80ms;
-        color: goldenrod
-    }
-
-    .loginPopUp #logInBt{
-        font-size: 18px;
-        font-weight: 600;
-        color: rgb(245, 250, 255);
-        padding: 8px 18px;
-        border: none;
-        background-color: rgb(87, 73, 40);
-        box-shadow: 5px 5px 10px rgb(136, 136, 136);
-        margin: 5px;
-        transition: all 80ms;
-    }
-
-    .loginPopUp #logInBt:hover{
-        transition: all 80ms;
-        transform: scale(1.04);
-        background-color: rgb(117, 95, 44)    
-    }
-
-    .loginPopUp #orText{
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .loginPopUp #orText p{
-        font-weight: 400;
-        font-size: 14px;
-    }
-
-    .loginPopUp .line{
-        height: 1px;
-        width: 60px;
-        background-color: black;
-        margin: 10px;
-    }
-
-    .loginPopUp #googleLoginBt{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 16px;
-        font-weight: 600;
-        padding: 2px 10px;
-        transition: all 80ms;
-        box-shadow: 2px 2px 5px rgb(136, 136, 136);
-        margin-bottom: 10px;
-    }
-
-    .loginPopUp #googleLoginBt:hover{
-        transition: all 80ms;
-        transform: scale(1.04);
-    }
-
-    .loginPopUp #googleLoginBt img{
-        width: 22px;
-        height: 22px;
-        margin: 5px 10px 5px 0px;
     }
 </style>

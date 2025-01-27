@@ -19,7 +19,6 @@
     function changeProfileVisibility(){
         showProfile = showProfile ? false : true;
     }
-    
 </script>
 
 <header>

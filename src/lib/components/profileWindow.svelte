@@ -1,15 +1,27 @@
 <script>
-    import settingsIcon from "$lib/icons/settingIcon.png"
-    import logoutIcon from "$lib/icons/logoutIcon.png"
+    import settingsIcon from "$lib/icons/settingIcon.png";
+    import logoutIcon from "$lib/icons/logoutIcon.png";
+    import { logout } from "$lib/firebase/auth.client";
+    import authStore from "$lib/stores/auth.store";
+
+    async function handleLogout(){
+        try {
+            await logout()
+        } catch (error) {
+            console.log(error);
+        }
+    }
 </script>
 
 <div class="profileWindow">
     <h2>Mateusz Dziedzic</h2>
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div class="profileOptions">
         <div class="settings">
             <img src={settingsIcon} alt="Settings Icon" class="img"><p>Ustawienia</p>
         </div>
-        <div class="logOut">
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
+        <div class="logOut" onclick={handleLogout}>
             <img src={logoutIcon} alt="Logout Icon" class="img"><p>Wyloguj się</p>
         </div>
     </div>   
@@ -57,12 +69,20 @@
         margin-left: 50px;
         display: flex;
         align-items: center;
+        transition: all 200ms;
     }
 
     .profileOptions .logOut{
         margin-left: 50px;
         display: flex;
         align-items: center;
+        transition: all 200ms;
+    }
+
+    .profileOptions .logOut:hover, .settings:hover{
+        cursor: pointer;
+        transform: scale(1.04);
+        transition: all 200ms;
     }
     
     .profileOptions p{

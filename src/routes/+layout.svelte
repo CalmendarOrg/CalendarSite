@@ -1,13 +1,13 @@
 <script>
-    import LoginPopUp from "$lib/components/auth/loginPopUp.svelte";
-    
-    // import "$lib/firebase/firebase.client"; - NAPRAWIĆ BO NIE DZIAŁA !!!!!!
+    import LoginPopUp from "$lib/components/auth/loginPopUp.svelte";  
+    import "$lib/firebase/firebase.client";
+    import authStore from "$lib/stores/auth.store";
 
     let { children } = $props();
-    let showLoginPopUp = $state(false);
+    //let showLoginPopUp = $state(true);
 </script>
 
-{#if showLoginPopUp}
+{#if !$authStore.isLoggedIn}
     <LoginPopUp />
 {/if}
 
