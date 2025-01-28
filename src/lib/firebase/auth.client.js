@@ -1,4 +1,5 @@
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { getUserInfo } from './database.client';
 
 export async function loginWithGoogle() {
     const auth = getAuth();
@@ -11,16 +12,24 @@ export async function logout(){
 }
 
 export async function registerEmailPassword(email, password){
-    const userCredntial = await createUserWithEmailAndPassword(getAuth(), email, password);
+    const auth = getAuth();
+    const userCredntial = await createUserWithEmailAndPassword(auth, email, password);
     return userCredntial.user;
 }
 
 export async function signInEmailAndPassword(email, password){
-    const userCredntial = await signInWithEmailAndPassword(getAuth(), email, password);
+    const auth = getAuth();
+    const userCredntial = await signInWithEmailAndPassword(auth, email, password);
     return userCredntial.user;
 }
 
-export function getUserData(){
-    const user = getAuth().currentUser;    
-    return {userName: user.displayName, photoURL: user.photoURL};
+export async function getUserData(){
+    const user = getAuth().currentUser;
+    
+    try {
+        let name = await getUserInfo(user.uid);
+        return {name: name, photoURL: user.photoURL};
+    } catch (error) {
+        return {name: 'Error', photoURL: user.photoURL};
+    }    
 }

@@ -3,7 +3,12 @@
     import logoutIcon from "$lib/icons/logoutIcon.png";
     import { logout } from "$lib/firebase/auth.client";
     import authStore from "$lib/stores/auth.store";
+	import { onMount } from "svelte";
+    import { getUserData } from "$lib/firebase/auth.client";
 
+    let { userLoggedIn } = $props();
+    let userInfo = $state({name: '', photoURL: ''});
+    
     async function handleLogout(){
         try {
             await logout()
@@ -11,10 +16,15 @@
             console.log(error);
         }
     }
+
+    onMount(async () => {
+        userInfo = await getUserData();   
+    })
+
 </script>
 
 <div class="profileWindow">
-    <h2>Mateusz Dziedzic</h2>
+    <h2>{userInfo.name}</h2>
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div class="profileOptions">
         <div class="settings">
@@ -24,7 +34,7 @@
         <div class="logOut" onclick={handleLogout}>
             <img src={logoutIcon} alt="Logout Icon" class="img"><p>Wyloguj się</p>
         </div>
-    </div>   
+    </div>     
 </div>
 
 <style>

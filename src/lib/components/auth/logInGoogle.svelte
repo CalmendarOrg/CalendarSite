@@ -1,19 +1,23 @@
 <script>
     import googleIcon from "$lib/icons/googleIcon.png";
     import { loginWithGoogle } from "$lib/firebase/auth.client"
+    import logInStore from "$lib/stores/logIn.store";
+    import { setUser, getUserInfo } from "$lib/firebase/database.client";
 
     let { logInForm } = $props();
 
     async function handleBtnClick(){
         try {
             const user = await loginWithGoogle();
+            setUser(user);
+            logInStore.set(false);
         } catch (error) {
             console.log(error);
         }
     }
 </script>
 
-<button id="googleLoginBt" onclick={handleBtnClick}><img src={googleIcon} alt="">{logInForm ? "Zaloguj się" : "Załóż konto"} z Google</button>
+<button type="button" id="googleLoginBt" onclick={handleBtnClick}><img src={googleIcon} alt="">{logInForm ? "Zaloguj się" : "Załóż konto"} z Google</button>
 
 <style>
     #googleLoginBt{

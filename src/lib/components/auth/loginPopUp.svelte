@@ -1,7 +1,11 @@
 <script>
     import popUpBgImg from "$lib/images/loginBgImg.jpg";
+    import xIcon from "$lib/icons/close.png";
 	import AuthForm from "$lib/components/auth/authForm.svelte";
-    import { registerEmailPassword, signInEmailAndPassword } from "$lib/firebase/auth.client"
+    import { registerEmailPassword, signInEmailAndPassword } from "$lib/firebase/auth.client";
+    import logInStore from "$lib/stores/logIn.store";
+	import { goto } from "$app/navigation";
+    import { setUser } from "$lib/firebase/database.client";
 
     let logInForm = $state(true);
     let emailValue = $state('');
@@ -10,14 +14,18 @@
 
     async function register(e){
         try {
+            e.preventDefault();
             emailErrorText = '';
             passwordErrorText = '';
 
             const formData = new FormData(e.target);
             const email = formData.get('email');
             const password = formData.get('password');
-
+            
+            console.log(formData, email, password);
             const user = await registerEmailPassword(email, password);
+            setUser(user);
+            logInStore.set(false);         
         } catch (error) {            
             if(error.code === 'auth/invalid-email' || error.code === 'auth/missing-email'){
                 emailErrorText = "Error! Podano nieprawidłowy email!";
@@ -34,6 +42,7 @@
 
     async function logIn(e){
         try {
+            e.preventDefault();
             emailErrorText = '';
             passwordErrorText = '';
             
@@ -42,6 +51,8 @@
             const password = formData.get('password');
 
             const user = await signInEmailAndPassword(email, password);
+            setUser(user);
+            logInStore.set(false);           
         } catch (error) {
             if(error.code === 'auth/invalid-email' || error.code === 'auth/missing-email'){
                 emailErrorText = "Error! Podano nieprawidłowy email!";
@@ -50,17 +61,26 @@
             }else if(error.code === 'auth/invalid-credential'){
                 emailErrorText = "Error! Niepoprawny email lub hasło";
                 passwordErrorText = "Error! Niepoprawny email lub hasło"
-            }
+            }else console.log(error);
         }
+    }
+
+    function closePopUp(e){
+        if (e.target !== this) return;    
+        logInStore.set(false);
     }
 </script>
 
-<div class="popUpBackground">
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div class="popUpBackground" onclick={closePopUp}>
     <div class="loginPopUp">
         <div class="leftSide">
 
         </div>
         <div class="rightSide">     
+            <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+            <img src={xIcon} alt="X" id="closeIcon" onclick={closePopUp}>
             <h2>Cal(m)endar</h2>
             <h3>Twój spokój ducha podczas planowania</h3>
             {#if logInForm}
@@ -140,5 +160,17 @@
         text-align: center;
         margin: 20px 80px;
         color: rgb(125, 86, 19);
+    }
+
+    .loginPopUp #closeIcon{
+        position: relative;
+        left: 160px;
+        bottom: 15px;
+        height: 18px;
+        width: 18px;
+    }
+
+    .loginPopUp #closeIcon:hover{
+        cursor: pointer;
     }
 </style>
