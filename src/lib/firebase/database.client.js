@@ -1,9 +1,7 @@
 import { collection, doc, setDoc, getDoc  } from "firebase/firestore"; 
 import { db } from "./firebase.client";
 
-export async function setUser(user){
-    let name = user.displayName === null ? user.email : user.displayName;
-    
+export async function setUser(user, name){
     const users = collection(db, 'users');
     await setDoc(doc(users, user.uid), {
         userId: user.uid,

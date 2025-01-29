@@ -1,5 +1,6 @@
 <script>
     import LoginPopUp from "$lib/components/auth/loginPopUp.svelte";  
+	import NewTaskPopup from "$lib/components/newTaskPopup.svelte";
     import "$lib/firebase/firebase.client";
     import authStore from "$lib/stores/auth.store";
     import logInStore from "$lib/stores/logIn.store";
@@ -11,5 +12,7 @@
 {#if $logInStore}
     <LoginPopUp />
 {/if}
+
+<NewTaskPopup />
 
 {@render children()}

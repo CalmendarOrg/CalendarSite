@@ -61,8 +61,12 @@
     main .leftMenu{
         width: 290px;
         margin: 0px 15px;
-        transition: width 200ms ease-in-out;           
+        transition: width 200ms ease-in-out; 
+        display: flex;          
+        flex-direction: column;
+        align-items:center ;
     }
+    
 
     main .hide{
         width: 0px;
