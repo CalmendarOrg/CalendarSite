@@ -52,7 +52,7 @@
     <div class="profile">
         {#if showProfile}
             {#if $authStore.isLoggedIn}
-                <ProfileWindow/>
+                <ProfileWindow bind:showProfile/>
             {/if}            
         {/if}    
         <!-- svelte-ignore a11y_click_events_have_key_events -->

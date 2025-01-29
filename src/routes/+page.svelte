@@ -4,6 +4,11 @@
 	import Calendar from "$lib/components/calendar/calendar.svelte";
 	import Header from "$lib/components/header.svelte";
     import { getMonthDays } from "$lib/helpers/monthInDays.helper";
+	import { count } from "firebase/firestore";
+
+    /** @type {import('./$types').PageProps} */
+	let { data } = $props();
+    console.log( data );
 
     let hide = $state(false);
     function changeLeftMenu(){
@@ -26,6 +31,7 @@
         <div class="leftMenu" class:hide>
             <NewTaskButton {hide}/>
             <TagButton {hide} tagColor = "Blue"/>
+            
         </div>
         <Calendar {month}/>
     </main>
@@ -61,7 +67,10 @@
     main .leftMenu{
         width: 290px;
         margin: 0px 15px;
-        transition: width 200ms ease-in-out;           
+        transition: width 200ms ease-in-out;  
+        display: flex;
+        flex-direction: column;
+        align-items: center;         
     }
 
     main .hide{

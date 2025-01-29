@@ -6,12 +6,13 @@
 	import { onMount } from "svelte";
     import { getUserData } from "$lib/firebase/auth.client";
 
-    let { userLoggedIn } = $props();
+    let { showProfile = $bindable() } = $props();
     let userInfo = $state({name: '', photoURL: ''});
     
     async function handleLogout(){
         try {
-            await logout()
+            await logout();
+            showProfile = false;
         } catch (error) {
             console.log(error);
         }
