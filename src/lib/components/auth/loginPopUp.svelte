@@ -6,25 +6,34 @@
     import logInStore from "$lib/stores/logIn.store";
 	import { goto } from "$app/navigation";
     import { setUser } from "$lib/firebase/database.client";
+	import { error } from "@sveltejs/kit";
 
     let logInForm = $state(true);
     let emailValue = $state('');
     let emailErrorText = $state('');
     let passwordErrorText = $state('');
+    let nameErrorText = $state('');
 
     async function register(e){
         try {
             e.preventDefault();
             emailErrorText = '';
             passwordErrorText = '';
+            nameErrorText = ''; 
 
             const formData = new FormData(e.target);
             const email = formData.get('email');
             const password = formData.get('password');
-            
-            console.log(formData, email, password);
+            const name = formData.get('name');
+
+            if(name === "" || name === undefined){
+                throw new Error('auth/name-missing');
+            } else if(name.length <= 3){
+                throw new Error('auth/name-too-short');
+            }
+
             const user = await registerEmailPassword(email, password);
-            setUser(user);
+            setUser(user, name);
             logInStore.set(false);         
         } catch (error) {            
             if(error.code === 'auth/invalid-email' || error.code === 'auth/missing-email'){
@@ -36,6 +45,10 @@
             }else if(error.code === 'auth/email-already-in-use'){
                 logInForm = true;
                 emailErrorText = "Error! Podany email posiada juz konto!";
+            }else if(error == 'Error: auth/name-missing'){
+                nameErrorText = "Nie podano imienia!"
+            }else if(error == "Error: auth/name-too-short"){
+                nameErrorText = "Imie musi posiadać minimum 3 znaki"
             }
         }
     }
@@ -61,7 +74,7 @@
             }else if(error.code === 'auth/invalid-credential'){
                 emailErrorText = "Error! Niepoprawny email lub hasło";
                 passwordErrorText = "Error! Niepoprawny email lub hasło"
-            }else console.log(error);
+            }
         }
     }
 
@@ -80,20 +93,21 @@
         </div>
         <div class="rightSide">     
             <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-            <img src={xIcon} alt="X" id="closeIcon" onclick={closePopUp}>
+            <img src={xIcon} alt="X" id="closeIcon" onclick={closePopUp} class:logInForm>
             <h2>Cal(m)endar</h2>
             <h3>Twój spokój ducha podczas planowania</h3>
             {#if logInForm}
-                <AuthForm bind:logInForm authFunction={logIn} bind:emailValue {emailErrorText} {passwordErrorText}/>
+                <AuthForm bind:logInForm authFunction={logIn} bind:emailValue {emailErrorText} {passwordErrorText} />
             {:else}
-                <AuthForm bind:logInForm authFunction={register} bind:emailValue {emailErrorText} {passwordErrorText}/>
+                <AuthForm bind:logInForm authFunction={register} bind:emailValue {emailErrorText} {passwordErrorText} {nameErrorText}/>
             {/if}            
         </div>
     </div>
 </div>   
 
+
 <style>
-    .popUpBackground{
+    :global(.popUpBackground){
         display: flex;
         align-items: center;
         justify-content: center;
@@ -164,8 +178,8 @@
 
     .loginPopUp #closeIcon{
         position: relative;
-        left: 160px;
-        bottom: 15px;
+        left: 165px;
+        
         height: 18px;
         width: 18px;
     }
@@ -173,4 +187,10 @@
     .loginPopUp #closeIcon:hover{
         cursor: pointer;
     }
+    
+    .loginPopUp .logInForm{
+        top: -22px;
+    }
+    
+
 </style>

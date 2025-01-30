@@ -4,11 +4,12 @@
 	import Calendar from "$lib/components/calendar/calendar.svelte";
 	import Header from "$lib/components/header.svelte";
     import { getMonthDays } from "$lib/helpers/monthInDays.helper";
+	import authStore from "$lib/stores/auth.store";
 	import { count } from "firebase/firestore";
+	import { onMount } from "svelte";
 
     /** @type {import('./$types').PageProps} */
 	let { data } = $props();
-    console.log( data );
 
     let hide = $state(false);
     function changeLeftMenu(){
@@ -17,10 +18,20 @@
     }
 
     const date = new Date();
-    let month = $state(getMonthDays(date)); 
-    function changeMonthDays(monthShift){
+    let month = $state([]);
+
+    onMount(async () => {
+        month = await getMonthDays(date);
+    });
+
+    async function changeMonthDays(monthShift){
+        date.setDate(1);
         date.setMonth(date.getMonth() + monthShift);
-        month = getMonthDays(date);
+        month = await getMonthDays(date);
+    }
+
+    async function refreshMonthDays(){
+        month = await getMonthDays(date);
     }
 
 </script>
@@ -34,6 +45,11 @@
             
         </div>
         <Calendar {month}/>
+        {#if $authStore.isLoggedIn}
+            <span style="display: none;">{refreshMonthDays()}</span>
+        {:else}
+            <span style="display: none;">{refreshMonthDays()}</span>
+        {/if}
     </main>
 </div>
 

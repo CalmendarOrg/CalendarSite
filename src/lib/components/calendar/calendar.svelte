@@ -1,9 +1,9 @@
 <script>
     import MonthDay from "$lib/components/calendar/monthDay.svelte";
-    
+	import authStore from "$lib/stores/auth.store";
+
     let { month } = $props();
     const today = new Date();
-    
 
 </script>
 
@@ -30,7 +30,7 @@
         <h2>Ndz</h2>
     </div>
     {#each month as day, i}
-        <MonthDay dayNumber={day.day} rightBorder={(i+1) % 7 === 0} darkerBg={((i) % 7) % 2 === 0} outOfMonth={day.otherMonth}/>
+        <MonthDay dayNumber={day.day} date={day.date} rightBorder={(i+1) % 7 === 0} darkerBg={((i) % 7) % 2 === 0} outOfMonth={day.otherMonth} dayTasks={day.tasksIds}/>
     {/each}
 </div>
 

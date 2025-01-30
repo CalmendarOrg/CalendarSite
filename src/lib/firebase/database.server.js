@@ -1,18 +1,27 @@
-import pkg from 'firebase-admin';
-const {firestore} = pkg;
 import { db } from "./firebase.server";
 
-export async function addNewTag(tagTitle) {
+export async function addNewTag(tagTitle, color, userId) {
     const tagCollection = db.collection('tags');
     const tagRef = await tagCollection.add({
         title: tagTitle,
+        color: color,
         tasksIds: []
     });
 
-    return tagRef.id;
+    tagRef.update({
+        tagId: tagRef.id
+    })
+
+    const userRef = await db.collection('users').doc(userId);
+    const prevIds = (await userRef.get()).data().tagsIds;
+
+    await userRef.update({
+        tagsIds: [...prevIds, tagRef.id]
+    });
 }
 
-export async function addNewTask(task) {
+
+export async function addNewTask(task, tagId) {
     const taskCollection = db.collection('tasks');
     const taskRef = await taskCollection.add({
         title: task.title,
@@ -20,16 +29,14 @@ export async function addNewTask(task) {
         description: task.description,
     });
 
-    console.log(taskRef);
+    taskRef.update({
+        taskId: taskRef.id
+    })
 
-    return taskRef.id;
-}
-
-export async function updateTagTasks(tagId, taskId) {
-    const tagRef = await db.collection('tags').doc(tagId);
+    const tagRef = db.collection('tags').doc(tagId);
     const prevIds = (await tagRef.get()).data().tasksIds;
 
     await tagRef.update({
-        tasksIds: [...prevIds, taskId]
+        tasksIds: [...prevIds, taskRef.id]
     });
 }

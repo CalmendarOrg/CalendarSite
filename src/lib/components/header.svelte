@@ -11,6 +11,7 @@
     let currentDateToShow = $state(new Date());
 
     function changeDate(monthShift){
+        currentDateToShow.setDate(1);
         currentDateToShow.setMonth(currentDateToShow.getMonth() + monthShift);
         currentDateToShow = new Date(currentDateToShow);
         changeMonthDays(monthShift);

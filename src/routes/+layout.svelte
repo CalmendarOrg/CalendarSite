@@ -1,15 +1,20 @@
 <script>
     import LoginPopUp from "$lib/components/auth/loginPopUp.svelte";  
+	import NewTaskPopUp from "$lib/components/newTaskPopUp.svelte";
     import "$lib/firebase/firebase.client";
-    import authStore from "$lib/stores/auth.store";
     import logInStore from "$lib/stores/logIn.store";
+    import addTaskStore from "$lib/stores/addTask.store";
 
     let { children } = $props();
-    //let showLoginPopUp = $state(true);
 </script>
 
 {#if $logInStore}
     <LoginPopUp />
 {/if}
+
+{#if $addTaskStore}
+    <NewTaskPopUp />
+{/if}
+
 
 {@render children()}

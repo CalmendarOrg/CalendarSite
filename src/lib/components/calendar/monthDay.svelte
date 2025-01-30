@@ -1,11 +1,22 @@
 <script>
 	import { onMount } from "svelte";
+    import { getTaskInfo } from "$lib/firebase/database.client";
 
-    let { dayNumber, rightBorder, darkerBg, outOfMonth} = $props();
+    let { dayNumber, date, rightBorder, darkerBg, outOfMonth, dayTasks} = $props();
+
+    let okej = $state([])
+    onMount(async() => {
+        dayTasks.forEach(async (taskId) => {
+            okej.push(await getTaskInfo(taskId))
+        });       
+    })
 </script>
 
 <div class="calendarBorders" class:rightBorder class:darkerBg class:outOfMonth>
     <h2>{dayNumber}</h2>
+    {#each dayTasks as task}
+        <h3>{task}</h3>
+    {/each}
 </div>
 
 <style>
