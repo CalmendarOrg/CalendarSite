@@ -1,3 +1,10 @@
 import { writable } from "svelte/store";
 
-export default writable(false);
+const logInStore = writable(false);
+
+export default{
+    subscribe: logInStore.subscribe,
+    set: (n) =>{
+        logInStore.set(n);
+    }
+}

@@ -12,6 +12,7 @@
     })
 
     async function refreshTags(){
+        tags = await getUserTags($authStore.userId);
         setTimeout(() => {$addTaskStore = false}, 300);
         setTimeout(() => {$addTaskStore = true}, 301);
     }
@@ -21,6 +22,10 @@
         $addTaskStore = false;
     }
 
+    function handleSubmit(){
+        setTimeout(() => {$addTaskStore = false}, 300);
+    }
+
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -28,7 +33,7 @@
 <div class="popUpBackground" onclick={closePopUp}>
     <div class="newTaskPopup">
         <h2>Nowe Zadanie</h2>
-        <form id="myForm" method="POST" action="?/addTask" use:enhance>
+        <form id="myForm" method="POST" action="?/addTask" use:enhance onsubmit={handleSubmit}>
             <section class="topSide">
                 <section class="leftBox">
                     <section class="inputSection nameSection">
@@ -45,8 +50,8 @@
                     <section class="selectSection">
                         <label for="tags"><h3>Etykieta*: </h3></label>
                         <select name="tags" id="tags">
-                            {#each tags as tag }
-                                <option value={tag.tagId}>{tag.title}</option>
+                            {#each tags as tag}    
+                                <option value={tag.tagId}>{tag.title}</option>                              
                             {/each}
                         </select>
                     </section>
@@ -68,7 +73,7 @@
             </section>
             <input type="text" id="hideInput" name="userId" value={$authStore.userId}>
             <section class="buttonSection">
-                <button id="submit" type="submit" class="buttonsStyle">Akceptuj</button> 
+                <button id="submit" type="submit" class="buttonsStyle">Dodaj</button> 
                 <button id="reset" type="reset" class="buttonsStyle">Reset</button>
             </section>
         </form>

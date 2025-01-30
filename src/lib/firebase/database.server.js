@@ -13,9 +13,7 @@ export async function addNewTag(tagTitle, color, userId) {
     })
 
     const userRef = await db.collection('users').doc(userId);
-    console.log((await userRef.get()).data());
     const prevIds = (await userRef.get()).data().tagsIds;
-    console.log(prevIds);
 
     await userRef.update({
         tagsIds: [...prevIds, tagRef.id]

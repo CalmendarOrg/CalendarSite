@@ -1,6 +1,6 @@
 import { db } from "$lib/firebase/firebase.server";
 import { addNewTag, addNewTask } from "$lib/firebase/database.server";
-import { redirect } from '@sveltejs/kit';
+import { redirect, fail } from '@sveltejs/kit';
 
 export async function load() {  
     const count = await db.collection('users').count().get();
@@ -42,12 +42,17 @@ export const actions = {
         const tagId = data.get('tags');
         const taskDesc = data.get('taskDesc');
 
-        if(taskName === '' || taskDate === '' || taskDesc === '' || tagId === ''){
+        console.log(taskName, taskDate, tagId, taskDesc)
 
+
+        if(taskName === '' || taskDate === '' || taskDesc === '' || tagId === ''){
+            return fail(400, { incorrect: true });
         }else{          
             await addNewTask({title: taskName, date: taskDate, description: taskDesc}, tagId);
         }
         
-        redirect(303, '/');
+        //redirect(303, '/');
+        console.log("Dodano pomyslnie");
+        return { success: true };
 	},
 };

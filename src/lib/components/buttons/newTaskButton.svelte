@@ -3,12 +3,12 @@
     import addTaskStore from "$lib/stores/addTask.store";
     import authStore from "$lib/stores/auth.store";
 
-    let { hide } = $props();
+    let { hide} = $props();
     let disabled = $state();
 
     function handleClick(){
         if($authStore.isLoggedIn){
-            $addTaskStore = true;
+            addTaskStore.set(true);
         }      
     }
 </script>

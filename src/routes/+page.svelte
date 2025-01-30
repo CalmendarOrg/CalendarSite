@@ -9,7 +9,7 @@
 	import { onMount } from "svelte";
 
     /** @type {import('./$types').PageProps} */
-	let { data } = $props();
+	let { data, form } = $props();  
 
     let hide = $state(false);
     function changeLeftMenu(){
@@ -41,8 +41,12 @@
     <main>
         <div class="leftMenu" class:hide>
             <NewTaskButton {hide}/>
-            <TagButton {hide} tagColor = "Blue"/>
-            
+            {#if form?.success} 
+                {alert("Pomyślnie dodano nowe zadanie")}
+                <span style="display: none;">{refreshMonthDays()}</span>
+            {/if}
+            {#if form?.incorrect} {alert("Niepoprawne dane w formularzu")} {/if}
+            <TagButton {hide} tagColor = "Blue"/>           
         </div>
         <Calendar {month}/>
         {#if $authStore.isLoggedIn}
