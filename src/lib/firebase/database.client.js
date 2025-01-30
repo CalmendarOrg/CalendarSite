@@ -9,7 +9,7 @@ export async function setUser(user, name){
         await setDoc(doc(users, user.uid), {
             userId: user.uid,
             name: name, 
-            tagsId: []
+            tagsIds: []
         })
     } 
 }
@@ -30,7 +30,7 @@ export async function getUserTags(userId){
     const tagsPromises = tagsIds.map(async (tagId) => {
         const tagsRef = doc(db, 'tags', tagId);
         const tagsSnap = await getDoc(tagsRef);
-        return { title: tagsSnap.data().title, color: tagsSnap.data().color, tagId: tagsSnap.data().tagId};
+        return { title: tagsSnap.data().title, color: tagsSnap.data().color, tagIds: tagsSnap.data().tagId};
     });
 
     const tagsTitles = await Promise.all(tagsPromises); 
