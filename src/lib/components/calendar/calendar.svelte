@@ -1,21 +1,10 @@
 <script>
     import MonthDay from "$lib/components/calendar/monthDay.svelte";
-    
-    let props = $props();
+	import authStore from "$lib/stores/auth.store";
 
-    const month = [];
-    let j = 30;
-    let h = false;
-      
-    for(let i = 0; i < 7*5; i++){
-        month.push({dayNumber: j, thisMonth: h})
-        if(j < 31){
-            j++
-        }else {
-            j = 1;
-            h = h ? false : true;
-        }   
-    }
+    let { month } = $props();
+    const today = new Date();
+
 </script>
 
 <div class="calendar">
@@ -41,7 +30,7 @@
         <h2>Ndz</h2>
     </div>
     {#each month as day, i}
-        <MonthDay dayNumber={day.dayNumber} rightBorder={(i+1) % 7 === 0} darkerBg={((i) % 7) % 2 === 0} outOfMonth={!day.thisMonth}/>
+        <MonthDay dayNumber={day.day} date={day.date} rightBorder={(i+1) % 7 === 0} darkerBg={((i) % 7) % 2 === 0} outOfMonth={day.otherMonth} dayTasks={day.tasksIds}/>
     {/each}
 </div>
 
@@ -50,9 +39,8 @@
         flex: 1 1 auto;
         display: grid;
         grid-template-columns: repeat(7, minmax(0, 1fr));
-        grid-template-rows: 50px;
-        margin: 20px;
-        margin-bottom: 30px;
+        grid-template-rows: 50px;   
+        margin: 30px 50px 50px 0px;
     }
 
     .calendar .weekDay{

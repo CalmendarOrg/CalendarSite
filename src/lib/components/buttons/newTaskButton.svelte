@@ -1,12 +1,23 @@
 <script>
     import plusIcon from "$lib/icons/plus.png"
+    import addTaskStore from "$lib/stores/addTask.store";
+    import authStore from "$lib/stores/auth.store";
 
-    let { hide } = $props();
+    let { hide} = $props();
+    let disabled = $state();
+
+    function handleClick(){
+        if($authStore.isLoggedIn){
+            addTaskStore.set(true);
+        }      
+    }
 </script>
 
-<div class="createNewTask" class:hideButton = {hide}>
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<button class="createNewTask" class:hideButton = {hide} onclick={handleClick} class:disabled = {!$authStore.isLoggedIn} disabled={!$authStore.isLoggedIn}>
     <img src={plusIcon} alt="+"><h2>Dodaj zadanie</h2>
-</div>
+</button>
 
 <style>    
     .createNewTask{
@@ -45,4 +56,7 @@
         transition: right 200ms ease-in-out;
     }
 
+    .disabled:hover{
+        cursor: not-allowed;
+    }
 </style>

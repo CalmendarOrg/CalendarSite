@@ -1,25 +1,59 @@
 <script>
-    import ProfileWindow from "$lib/components/profileWindow.svelte";  
 	import NewTaskButton from "$lib/components/buttons/newTaskButton.svelte";
 	import TagButton from "$lib/components/buttons/tagButton.svelte";
 	import Calendar from "$lib/components/calendar/calendar.svelte";
 	import Header from "$lib/components/header.svelte";
+    import { getMonthDays } from "$lib/helpers/monthInDays.helper";
+	import authStore from "$lib/stores/auth.store";
+	import { count } from "firebase/firestore";
+	import { onMount } from "svelte";
+
+    /** @type {import('./$types').PageProps} */
+	let { data, form } = $props();  
 
     let hide = $state(false);
     function changeLeftMenu(){
         if(hide === true) hide = false;
         else hide = true;
     }
+
+    const date = new Date();
+    let month = $state([]);
+
+    onMount(async () => {
+        month = await getMonthDays(date);
+    });
+
+    async function changeMonthDays(monthShift){
+        date.setDate(1);
+        date.setMonth(date.getMonth() + monthShift);
+        month = await getMonthDays(date);
+    }
+
+    async function refreshMonthDays(){
+        month = await getMonthDays(date);
+    }
+
 </script>
 
 <div class="box">
-    <Header {changeLeftMenu}/>
+    <Header {changeLeftMenu} {changeMonthDays}/>
     <main>
         <div class="leftMenu" class:hide>
             <NewTaskButton {hide}/>
-            <TagButton {hide} tagColor = "Blue"/>
+            {#if form?.success} 
+                {alert("Pomyślnie dodano nowe zadanie")}
+                <span style="display: none;">{refreshMonthDays()}</span>
+            {/if}
+            {#if form?.incorrect} {alert("Niepoprawne dane w formularzu")} {/if}
+            <TagButton {hide} tagColor = "Blue"/>           
         </div>
-        <Calendar />
+        <Calendar {month}/>
+        {#if $authStore.isLoggedIn}
+            <span style="display: none;">{refreshMonthDays()}</span>
+        {:else}
+            <span style="display: none;">{refreshMonthDays()}</span>
+        {/if}
     </main>
 </div>
 
@@ -30,7 +64,7 @@
     
     :global(html){
         height: 100%;
-        background-color: rgb(250, 250, 250);
+        background-color: rgb(252, 252, 252);
     }
     
     :global(body){
@@ -52,7 +86,11 @@
 
     main .leftMenu{
         width: 290px;
-        transition: width 200ms ease-in-out;           
+        margin: 0px 15px;
+        transition: width 200ms ease-in-out;  
+        display: flex;
+        flex-direction: column;
+        align-items: center;         
     }
 
     main .hide{

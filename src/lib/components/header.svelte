@@ -1,31 +1,39 @@
 <script>
     import placeholderImage from "$lib/icons/worldface-british-guy-white-background.jpg";
-    import leftArrow from "$lib/icons/left-arrow.png";
-    
+    import leftArrow from "$lib/icons/left-arrow.png";   
     import ProfileWindow from "$lib/components/profileWindow.svelte"; 
     import { showMonthName } from "$lib/helpers/monthName.helper";
+    import authStore from "$lib/stores/auth.store";
+    import logInStore from "$lib/stores/logIn.store";
     
-    let { changeLeftMenu } = $props();
+    let { changeLeftMenu, changeMonthDays } = $props();
     
     let currentDateToShow = $state(new Date());
 
     function changeDate(monthShift){
+        currentDateToShow.setDate(1);
         currentDateToShow.setMonth(currentDateToShow.getMonth() + monthShift);
         currentDateToShow = new Date(currentDateToShow);
+        changeMonthDays(monthShift);
     }
 
     let showProfile = $state(false);
     function changeProfileVisibility(){
-        showProfile = showProfile ? false : true;
+        if($authStore.isLoggedIn){
+            showProfile = showProfile ? false : true;
+        }else changeLogInStore();   
     }
-    
+
+    function changeLogInStore(){       
+        logInStore.set(true);
+    }
 </script>
 
 <header>
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div class="burger" onclick={changeLeftMenu}>
-
+        
     </div>
 
     <div class="name">
@@ -44,7 +52,9 @@
     
     <div class="profile">
         {#if showProfile}
-            <ProfileWindow/>
+            {#if $authStore.isLoggedIn}
+                <ProfileWindow bind:showProfile/>
+            {/if}            
         {/if}    
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -134,6 +144,7 @@
         border-radius: 100px;
         transform-style: preserve-3d;
         box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        object-fit: cover;
     }
 
     header #profilePicture:hover{
